@@ -19,18 +19,11 @@ public class GlobalExceptionHandler {
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-	@ExceptionHandler(ProductNotFoundException.class)
-	public ResponseEntity<ErrorInfo> handleProductNotFoundException(ProductNotFoundException ex) {
+	@ExceptionHandler(OrderNotFoundException.class)
+	public ResponseEntity<ErrorInfo> handleProductNotFoundException(OrderNotFoundException ex) {
 		logger.error("ProductNotFoundException: {}", ex.getMessage(), ex);
 		ErrorInfo errorInfo = new ErrorInfo(HttpStatus.NOT_FOUND.value(), ex.getMessage(), LocalDateTime.now());
 		return new ResponseEntity<>(errorInfo, HttpStatus.NOT_FOUND);
-	}
-
-	@ExceptionHandler(ProductOutOfStockException.class)
-	public ResponseEntity<ErrorInfo> handleProductOutOfStockException(ProductOutOfStockException ex) {
-		logger.error("ProductOutOfStockException: {}", ex.getMessage(), ex);
-		ErrorInfo errorInfo = new ErrorInfo(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), LocalDateTime.now());
-		return new ResponseEntity<>(errorInfo, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(Exception.class)
