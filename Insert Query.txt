@@ -1,0 +1,23 @@
+-- Insert Data into Customer Table
+INSERT INTO Customer (name, email, phone, address, created_at) VALUES
+('John Doe', 'john.doe@email.com', '1234567890', '123 Main St', '2025-03-01 10:15:00'),
+('Alice Smith', 'alice.smith@email.com', '2345678901', '456 Oak St', '2025-03-02 11:20:00'),
+('Bob Johnson', 'bob.johnson@email.com', '3456789012', '789 Pine St', '2025-03-03 12:25:00'),
+('Mary Clark', 'mary.clark@email.com', '4567890123', '321 Elm St', '2025-03-04 13:30:00'),
+('Steve Rogers', 'steve.rogers@email.com', '5678901234', '987 Cedar St', '2025-03-05 14:35:00');
+
+-- Insert Data into Product Table
+INSERT INTO Product (name, price, quantity, created_at) VALUES
+('Laptop', 1200.00, 50, '2025-03-01 09:00:00'),
+('Smartphone', 800.00, 100, '2025-03-01 09:15:00'),
+('Tablet', 400.00, 30, '2025-03-01 09:30:00'),
+('Headphones', 100.00, 200, '2025-03-01 09:45:00'),
+('Smartwatch', 250.00, 75, '2025-03-01 10:00:00');
+
+-- Insert Data into Orders Table
+INSERT INTO Orders (customer_id, product_id, quantity, status, order_at) VALUES
+(1, 1, 2, 'PLACED', '2025-03-06 10:00:00'),
+(2, 2, 1, 'PLACED', '2025-03-06 10:15:00'),
+(3, 3, 5, 'PLACED', '2025-03-06 10:30:00'),
+(4, 4, 3, 'PLACED', '2025-03-06 10:45:00'),
+(5, 5, 1, 'PLACED', '2025-03-06 11:00:00');

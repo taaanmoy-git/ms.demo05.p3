@@ -1,0 +1,65 @@
+-- Database: ShoppingDB
+CREATE DATABASE IF NOT EXISTS ShoppingDB;
+USE ShoppingDB;
+
+-- Customer Table
+CREATE TABLE Customer (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    phone VARCHAR(15),
+    address TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Product Table
+CREATE TABLE Product (
+    product_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    quantity INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Order Table
+CREATE TABLE Orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    status ENUM('PLACED', 'CANCELLED') NOT NULL,
+    order_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
+    FOREIGN KEY (product_id) REFERENCES Product(product_id)
+);
+
+
+-- Not Going To Use Trigger
+-- Trigger to Decrease Product Quantity on Order Placement
+DELIMITER $$
+CREATE TRIGGER trg_decrease_quantity
+AFTER INSERT ON Orders
+FOR EACH ROW
+BEGIN
+    IF NEW.status = 'PLACED' THEN
+        UPDATE Product
+        SET quantity = quantity - NEW.quantity
+        WHERE product_id = NEW.product_id;
+    END IF;
+END$$
+DELIMITER ;
+
+-- Trigger to Increase Product Quantity on Order Cancellation
+DELIMITER $$
+CREATE TRIGGER trg_increase_quantity
+AFTER UPDATE ON Orders
+FOR EACH ROW
+BEGIN
+    IF OLD.status = 'PLACED' AND NEW.status = 'CANCELLED' THEN
+        UPDATE Product
+        SET quantity = quantity + OLD.quantity
+        WHERE product_id = OLD.product_id;
+    END IF;
+END$$
+DELIMITER ;
