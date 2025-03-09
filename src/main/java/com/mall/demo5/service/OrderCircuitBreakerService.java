@@ -14,10 +14,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
 import com.mall.demo5.dto.OrderDTO;
+import com.mall.demo5.dto.ProductDTO;
 import com.mall.demo5.entity.Order;
 import com.mall.demo5.exception.OrderNotFoundException;
+import com.mall.demo5.exception.ProductNotFoundException;
 import com.mall.demo5.repository.OrderRepository;
 
 public class OrderCircuitBreakerService {
@@ -34,17 +35,28 @@ public class OrderCircuitBreakerService {
 	@CircuitBreaker(name = "orderService", fallbackMethod = "placeOrderFallback")
 	public Future<ResponseEntity<OrderDTO>> createOrder(OrderDTO orderDTO) {
 		return Future.of(() -> {
+			
+			// Step 1: Call Product Service to GET Product Details By ProductId
+	        String getProductUrl = "http://ProductMS/api/products/" + orderDTO.getProductId();
+	        ProductDTO productDTO = restTemplate.getForObject(getProductUrl, ProductDTO.class);
+
+	        if (productDTO == null) {
+	            throw new ProductNotFoundException("Product not found with ID: " + orderDTO.getProductId());
+	        }
 			// Call Product Service to decrease quantity
 			String productServiceUrl = "http://ProductMS/api/products/decreaseQuantity/" + orderDTO.getProductId() + "/"
 					+ orderDTO.getQuantity();
 			restTemplate.put(productServiceUrl, null);
 
 			// Save the order
-			Order order = orderDTO.toEntity();
-			order.setStatus(Order.OrderStatus.PLACED);
-			order.setOrderAt(LocalDateTime.now());
+			// Step 3: Save the order 
+	        Order order = orderDTO.toEntity();
+	        order.setStatus(Order.OrderStatus.PLACED);
+	        order.setOrderAt(LocalDateTime.now());
 			orderRepository.save(order);
-			return ResponseEntity.ok(OrderDTO.createDTO(order));
+			 
+			// ✅ Step 5: Return the Response with Product Name & Price
+	        return ResponseEntity.ok(OrderDTO.createDTO(order, productDTO));
 		});
 	}
 

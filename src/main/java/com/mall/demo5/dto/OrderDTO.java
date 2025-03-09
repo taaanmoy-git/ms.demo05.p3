@@ -11,8 +11,30 @@ public class OrderDTO {
     private Integer quantity;
     private String status;// PLACED,CANCELLED
     private LocalDateTime orderAt;
+    
+    //Product Part, Some Part to Show Or Send  Response
 
-    public Long getOrderId() {
+    private String productName;
+    private double productPrice;
+
+    public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public double getProductPrice() {
+		return productPrice;
+	}
+
+	public void setProductPrice(double productPrice) {
+		this.productPrice = productPrice;
+	}
+	
+	// Order Part
+	public Long getOrderId() {
         return orderId;
     }
 
@@ -87,6 +109,23 @@ public class OrderDTO {
         dto.setQuantity(order.getQuantity());
         dto.setStatus(order.getStatus().name());
         dto.setOrderAt(order.getOrderAt());
+        return dto;
+    }
+    
+ // ✅ Create DTO from Order Entity + ProductDTO
+    public static OrderDTO createDTO(Order order, ProductDTO productDTO) {
+    	OrderDTO dto = new OrderDTO();
+        dto.setOrderId(order.getOrderId());
+        dto.setCustomerId(order.getCustomerId());
+        dto.setProductId(order.getProductId());
+        dto.setQuantity(order.getQuantity());
+        dto.setStatus(order.getStatus().name());
+        dto.setOrderAt(order.getOrderAt());
+
+        // ✅ Fetch from ProductDTO
+        dto.setProductName(productDTO.getName());
+        dto.setProductPrice(productDTO.getPrice());
+
         return dto;
     }
 }
