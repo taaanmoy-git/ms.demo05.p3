@@ -7,6 +7,8 @@ package com.mall.demo5.service;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.vavr.concurrent.Future;
 
+import java.time.LocalDateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,7 @@ public class OrderCircuitBreakerService {
 			// Save the order
 			Order order = orderDTO.toEntity();
 			order.setStatus(Order.OrderStatus.PLACED);
+			order.setOrderAt(LocalDateTime.now());
 			orderRepository.save(order);
 			return ResponseEntity.ok(OrderDTO.createDTO(order));
 		});
