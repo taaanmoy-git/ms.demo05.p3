@@ -23,20 +23,20 @@ public class Order {
     private OrderStatus status;
     private LocalDateTime orderAt;
     
-//    public Order() {
-//		super();
-//	}
-//    
-//	public Order(Long orderId, Long customerId, Long productId, Integer quantity, OrderStatus status,
-//			LocalDateTime orderAt) {
-//		super();
-//		this.orderId = orderId;
-//		this.customerId = customerId;
-//		this.productId = productId;
-//		this.quantity = quantity;
-//		this.status = status;
-//		this.orderAt = orderAt;
-//	}
+    public Order() {
+		super();
+	}
+    
+	public Order(Long orderId, Long customerId, Long productId, Integer quantity, OrderStatus status,
+			LocalDateTime orderAt) {
+		super();
+		this.orderId = orderId;
+		this.customerId = customerId;
+		this.productId = productId;
+		this.quantity = quantity;
+		this.status = status;
+		this.orderAt = orderAt;
+	}
 
 	public Long getOrderId() {
         return orderId;

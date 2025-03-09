@@ -1,5 +1,6 @@
 package com.mall.demo5;
 
+// LoadBalancing Dynamic
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

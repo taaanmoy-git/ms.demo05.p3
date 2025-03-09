@@ -39,7 +39,7 @@ public class OrderCircuitBreakerService {
 
 			// Save the order
 			Order order = orderDTO.toEntity();
-			
+			order.setStatus(Order.OrderStatus.PLACED);
 			orderRepository.save(order);
 			return ResponseEntity.ok(OrderDTO.createDTO(order));
 		});
